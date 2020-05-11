@@ -56,6 +56,8 @@ form.addEventListener("submit", (event) => {
       document.getElementById("launchStatus").style.color = 'red';
       document.getElementById("faultyItems").style.visibility = 'visible';
       event.preventDefault();
+   } else {
+      document.getElementById("fuelStatus").innerHTML = `Fuel level high enough for launch`;
    }
    if (cargoMass.value > 10000) {
       document.getElementById("cargoStatus").innerHTML = `Cargo mass too heavy to complete the journey.`;
@@ -63,6 +65,8 @@ form.addEventListener("submit", (event) => {
       document.getElementById("launchStatus").style.color = 'red';
       document.getElementById("faultyItems").style.visibility = 'visible';
       event.preventDefault();
+   } else {
+      document.getElementById("cargoStatus").innerHTML = `Cargo mass low enough for launch`;
    }
    if (fuelLevel.value >= 10000 && cargoMass.value <= 10000) {
       document.getElementById("fuelStatus").innerHTML = `Fuel level high enough for launch`;
