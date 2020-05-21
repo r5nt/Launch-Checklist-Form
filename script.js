@@ -32,50 +32,49 @@ fetch("https://handlers.education.launchcode.org/static/planets.json").then((res
 
 const form = document.querySelector("form");
 form.addEventListener("submit", (event) => {
+   event.preventDefault();
    const pilotName = document.querySelector("input[name=pilotName]");
    const copilotName = document.querySelector("input[name=copilotName]");
    const fuelLevel = document.querySelector("input[name=fuelLevel]");
    const cargoMass = document.querySelector("input[name=cargoMass]");
+   const onlyLetters = /^[a-zA-Z]+$/;
+   let correctFields = true;
    if (pilotName.value === "" || copilotName.value === "" || fuelLevel.value === "" || cargoMass.value === "") {
       alert("All fields are required!");
-      event.preventDefault();
-   }
-   if (typeof pilotName.value !== "string" || typeof copilotName.value !== "string") {
-      alert("Crew Names must be a string");
-      event.preventDefault();
-   }
-   if (isNaN(Number(fuelLevel.value)) || isNaN(Number(cargoMass.value))) {
+      correctFields = false;
+   } if (!onlyLetters.test(pilotName.value) || !onlyLetters.test(copilotName.value)) {
+      alert("Crew Names must be only contain letters");
+      correctFields = false;
+   } if (isNaN(Number(fuelLevel.value)) || isNaN(Number(cargoMass.value))) {
       alert("Fuel Level and Cargo Mass must be a number");
-      event.preventDefault();
+      correctFields = false;
    }
-   document.getElementById("pilotStatus").innerHTML = `Pilot ${pilotName.value} is ready for launch`;
-   document.getElementById("copilotStatus").innerHTML = `Pilot ${copilotName.value} is ready for launch`;
-   if (fuelLevel.value < 10000) {
-      document.getElementById("fuelStatus").innerHTML = `Fuel level too low to complete the journey`;
-      document.getElementById("launchStatus").innerHTML = `Shuttle not ready for launch`;
-      document.getElementById("launchStatus").style.color = 'red';
-      document.getElementById("faultyItems").style.visibility = 'visible';
-      event.preventDefault();
-   } else {
-      document.getElementById("fuelStatus").innerHTML = `Fuel level high enough for launch`;
+   if (correctFields) {
+      document.getElementById("pilotStatus").innerHTML = `Pilot ${pilotName.value} is ready for launch`;
+      document.getElementById("copilotStatus").innerHTML = `Pilot ${copilotName.value} is ready for launch`;
+      if (fuelLevel.value < 10000) {
+         document.getElementById("fuelStatus").innerHTML = `Fuel level too low to complete the journey`;
+         document.getElementById("launchStatus").innerHTML = `Shuttle not ready for launch`;
+         document.getElementById("launchStatus").style.color = 'red';
+         document.getElementById("faultyItems").style.visibility = 'visible';
+      } else {
+         document.getElementById("fuelStatus").innerHTML = `Fuel level high enough for launch`;
+      }
+      if (cargoMass.value > 10000) {
+         document.getElementById("cargoStatus").innerHTML = `Cargo mass too heavy to complete the journey.`;
+         document.getElementById("launchStatus").innerHTML = `Shuttle not ready for launch`;
+         document.getElementById("launchStatus").style.color = 'red';
+         document.getElementById("faultyItems").style.visibility = 'visible';
+      } else {
+         document.getElementById("cargoStatus").innerHTML = `Cargo mass low enough for launch`;
+      }
+      if (fuelLevel.value >= 10000 && cargoMass.value <= 10000) {
+         document.getElementById("fuelStatus").innerHTML = `Fuel level high enough for launch`;
+         document.getElementById("cargoStatus").innerHTML = `Cargo weight low enough for launch`;
+         document.getElementById("launchStatus").innerHTML = `Shuttle is ready for launch!`;
+         document.getElementById("launchStatus").style.color = 'green';
+         document.getElementById("faultyItems").style.visibility = "visible";
+      }
    }
-   if (cargoMass.value > 10000) {
-      document.getElementById("cargoStatus").innerHTML = `Cargo mass too heavy to complete the journey.`;
-      document.getElementById("launchStatus").innerHTML = `Shuttle not ready for launch`;
-      document.getElementById("launchStatus").style.color = 'red';
-      document.getElementById("faultyItems").style.visibility = 'visible';
-      event.preventDefault();
-   } else {
-      document.getElementById("cargoStatus").innerHTML = `Cargo mass low enough for launch`;
-   }
-   if (fuelLevel.value >= 10000 && cargoMass.value <= 10000) {
-      document.getElementById("fuelStatus").innerHTML = `Fuel level high enough for launch`;
-      document.getElementById("cargoStatus").innerHTML = `Cargo weight low enough for launch`;
-      document.getElementById("launchStatus").innerHTML = `Shuttle is ready for launch!`;
-      document.getElementById("launchStatus").style.color = 'green';
-      document.getElementById("faultyItems").style.visibility = "visible";
-      event.preventDefault();
-   }
-
 });
 
